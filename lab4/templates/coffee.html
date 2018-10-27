@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+
+{%  block title %}
+    Кофе {{ coffee.id }}
+{% endblock %}
+
+{% block body %}
+    <h1>Кофеёк №{{ coffee.id }}</h1>
+    <h1>Кофеёк {{ coffee.title }}</h1>
+{% endblock %}

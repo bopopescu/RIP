@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Категория
+{% endblock %}
+
+{% block body %}
+    <ul>
+        {% for syrup in syrups %}
+            <li><a href="{% url 'syrup_url' syrup.id %}"> {{ syrup.title }}</a> </li>
+            Описание {{syrup.title}} <!--переменная-->
+        {% empty %}
+            <li>пустой список</li>
+        {% endfor %}
+    </ul>
+{% endblock %}
