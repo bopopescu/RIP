@@ -10,17 +10,14 @@
 
         {% for coffee in coffees %}
             <div class="media">
-            <img class="mr-3" src="{{ coffee.img }}" alt="{{ coffee.title }}">
+            <img class="mr-3 ml-3" src="{{ coffee.img }}" alt="{{ coffee.title }}">
                 <legend>
             <a href="{% url 'coffee_url' coffee.id %}">{{ coffee.title }}</a>
-            <h5 class="ml-1" > <br>{{coffee.subtitle}}</h5></legend>
+            <h5 class="ml-1" >{{coffee.subtitle}}</h5></legend>
 
 
         {% empty %}
             <li>пустой список</li>
-            </div>
-            <div class="media-body">
-                <h5 class="mt-3">{{ coffee.subtitle }}</h5>
             </div>
         {% endfor %}
 
