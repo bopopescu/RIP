@@ -11,7 +11,7 @@ class Anime:
 
     def save(self):
         c = self.db_connection.cursor()
-        c.execute("INSERT INTO anime (name, description, author) VALUES (%s, %s, %s);", (self.name, self.description, self.author))
+        c.execute("INSERT INTO anime_table (name, description, author) VALUES (%s, %s, %s);", (self.name, self.description, self.author))
         self.db_connection.commit()
         c.close()
 

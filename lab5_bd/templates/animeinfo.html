@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+{% block title %}Some data{% endblock %}
+{% block body %}
+    <ul>
+        {% for anime in animes %}
+            <li>Название - {{ anime.name }},
+                Описание - {{ anime.description }},
+                Режиссёр - {{ anime.author }}.</li>
+        {% endfor %}
+    </ul>
+{% endblock %}

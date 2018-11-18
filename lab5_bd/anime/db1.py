@@ -10,11 +10,11 @@ db=pymysql.connect(
 
 c=db.cursor()
 
-c.execute('INSERT INTO anime (name, description, author) VALUES (%s, %s, %s);', ("Унесенные призраками", "Первое, что вспомнила", "Хайао Миядзаки"))
+c.execute('INSERT INTO anime_table (name, description, author) VALUES (%s, %s, %s);', ("Унесенные призраками", "Первое, что вспомнила", "Хайао Миядзаки"))
 
 db.commit()
 
-c.execute('SELECT * FROM anime;')
+c.execute('SELECT * FROM anime_table;')
 
 entries=c.fetchall()
 

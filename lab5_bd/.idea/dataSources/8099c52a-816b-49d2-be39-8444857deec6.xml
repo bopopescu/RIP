@@ -1098,7 +1098,7 @@
       <Charset>utf8mb4</Charset>
       <DefaultForCharset>0</DefaultForCharset>
     </collation>
-    <table id="275" parent="2" name="anime"/>
+    <table id="275" parent="2" name="anime_table"/>
     <table id="276" parent="2" name="django_migrations"/>
     <table id="277" parent="2" name="review"/>
     <table id="278" parent="2" name="user"/>
