@@ -3,8 +3,8 @@
 {% block body %}
     <ul>
         {% for anime in animes %}
-            <li>Название - {{ anime.name }},
-                Описание - {{ anime.description }},
+            <li><h3>Название - {{ anime.name }},</h3>
+                Описание - {{ anime.description }}<br>
                 Режиссёр - {{ anime.author }}.</li>
         {% endfor %}
     </ul>
