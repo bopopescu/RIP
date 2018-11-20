@@ -1,13 +1,12 @@
 from django.contrib import auth
 from django.contrib.auth.models import User
-from django.contrib.auth.views import LogoutView, LoginView
+from django.contrib.auth.views import LogoutView
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
 from django.views import View
-from django.views.generic import FormView
 
-from MMB.forms import RegistrationForm, LoginForm, EnterForm
+from MMB.forms import RegistrationForm, EnterForm
 from MMB.models import MemberModel, BandModel
 
 
@@ -50,38 +49,11 @@ class BandView(View):
         return render(request, 'band.html', {'band': band})
 
 
-#
-# class LoginView(LoginView):
-#     template_name = 'login.html'  # в ContextData есть form, так что не прописываем
-#     form_class = LoginForm
-#     redirect_authenticated_user = True
-#
-#     def get_context_data(self, **kwargs):
-#         data = super().get_context_data(**kwargs)
-#         data['form_action'] = reverse('login')  # в urls
-#         return data
-#
-#     def get_success_url(self):
-#         return reverse('chat_get')
-# # при использовании reverse url's не привязаны к путям->
-# # можем менять как угодно
-
 class LogoutView(LogoutView):
     def get(self, request, *args, **kwargs):
         auth.logout(request)
         return HttpResponseRedirect(reverse('login'))
 
-
-# class RegistrationView(FormView):
-#     form_class = RegistrationForm
-#     template_name = "registration.html"
-#
-#     def get_success_url(self):
-#         return reverse('login')
-#
-#     def form_valid(self, form):
-#         form.save()
-#         return super().form_valid(form)
 
 def registration(request):
     # Регаемся
@@ -89,7 +61,7 @@ def registration(request):
     success = ''
     if request.method == 'POST':
         if 'signIn' in request.POST:
-            return HttpResponseRedirect('/signin/')
+            return HttpResponseRedirect('/login/')
         form = RegistrationForm(request.POST)
         if form.is_valid():
             username = form.cleaned_data['username']
@@ -112,7 +84,7 @@ def registration(request):
                     last_name=form.cleaned_data['last_name']
                 )
                 user.save()
-                return HttpResponseRedirect('/signin/')
+                return HttpResponseRedirect('/login/')
 
     else:
         form = RegistrationForm()
@@ -124,7 +96,7 @@ def login(request):
     errors = []
     if request.method == 'POST':
         if 'reg' in request.POST:
-            return HttpResponseRedirect('/signup/')
+            return HttpResponseRedirect('/registration/')
         form = EnterForm(request.POST)
         if form.is_valid():
             username = form.cleaned_data['username']
