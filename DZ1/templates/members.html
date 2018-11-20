@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% block title %}Members{% endblock %}
+{% block body %}
+    <ul>
+        {% for member in members %}
+            <div class="media">
+            <a href="{% url 'member_url' member.id %}">
+                <li><h3>{{ member.first_name }} {{ member.last_name }}</h3></li>
+            </a>
+            </div>
+        {% endfor %}
+    </ul>
+{% endblock %}
