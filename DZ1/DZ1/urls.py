@@ -17,7 +17,7 @@ from django.conf.urls import url
 from django.contrib import admin
 from django.urls import path
 
-from MMB.views import Start, MembersView, MemberView, BandsView, BandView
+from MMB.views import Start, MembersView, MemberView, BandsView, BandView, LogoutView, LoginView, RegistrationView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -26,4 +26,7 @@ urlpatterns = [
     url(r'^member/(?P<id>\d+)$', MemberView.as_view(), name='member_url'),
     url(r'^band/$', BandsView.as_view()),
     url(r'^band/(?P<id>\d+)$', BandView.as_view(), name='band_url'),
+    path('logout/', LogoutView.as_view(), name='logout'),
+    path('login/', LoginView.as_view(), name='login'),
+    path('registration/', RegistrationView.as_view(), name='registration'),
 ]
