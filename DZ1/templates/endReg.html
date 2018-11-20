@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Films list{% endblock %}
+{% block body %}
+
+    {% if username %}
+        <div class="add">
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal"
+                    name="add_film">Группы
+            </button>
+        </div>
+                <div class="add">
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal"
+                    name="add_film">Музыканты
+            </button>
+        </div>
+    {% endif %}
+    <form method="post">
+        {% csrf_token %}
+        {% if username %}
+            <div>
+                <div class="out">
+                    <button class="btn btn-primary" type="submit" name="logout">Выйти</button>
+                </div>
+            </div>
+        {% endif %}
+        {% if not username %}
+            <div>
+                <div class="out">
+                    <button class="btn btn-primary" type="submit" name="logout">Войти</button>
+                </div>
+            </div>
+        {% endif %}
+    </form>
+{% endblock %}

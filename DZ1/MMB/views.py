@@ -10,9 +10,16 @@ from MMB.forms import RegistrationForm, EnterForm
 from MMB.models import MemberModel, BandModel
 
 
-class Start(View):
+class Start(View):  # При входе, если не залогинен, открывается регистрация
     def get(self, request):
         return render(request, 'main_page.html')
+
+    def post(self, request):
+        if request.method == 'POST':
+            if 'sign_in' in request.POST:  # по жмяку на кнопку
+                return HttpResponseRedirect('/login/')
+            elif 'sign_up' in request.POST:
+                return HttpResponseRedirect('/registration/')
 
 
 class MembersView(View):
@@ -52,7 +59,7 @@ class BandView(View):
 class LogoutView(LogoutView):
     def get(self, request, *args, **kwargs):
         auth.logout(request)
-        return HttpResponseRedirect(reverse('login'))
+        return HttpResponseRedirect(reverse(''))
 
 
 def registration(request):
@@ -104,9 +111,20 @@ def login(request):
             user = auth.authenticate(username=username, password=password)
             if user:
                 auth.login(request, user)
-                return HttpResponseRedirect('/login/')
+                return HttpResponseRedirect('/start/')
             else:
                 errors.append('Неверно введён логин или пароль')
     else:
         form = EnterForm()
     return render(request, 'login.html', {'form': form, 'errors': errors})
+
+
+class TitlesView(View):
+    def get(self, request):
+        return render(request, 'endReg.html', {'username': auth.get_user(request).username})
+
+    def post(self, request):
+        if request.method == 'POST':
+            if 'logout' in request.POST:
+                auth.logout(request)
+                return HttpResponseRedirect('/login/')
