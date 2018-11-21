@@ -194,7 +194,11 @@ class TitlesView(View):
             if 'logout' in request.POST:
                 auth.logout(request)
                 return HttpResponseRedirect('/login/')
-            if 'bands' in request.POST:
+            if 'band' in request.POST:
                 return HttpResponseRedirect('/band/')
-            if 'members' in request.POST:
+            if 'member' in request.POST:
                 return HttpResponseRedirect('/member/')
+            if 'sign_in' in request.POST:
+                return HttpResponseRedirect('/login/')
+            elif 'sign_up' in request.POST:
+                return HttpResponseRedirect('/registration/')
