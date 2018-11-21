@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% block title %}Bands{% endblock %}
+{% block body %}
+    {% for row in bands %}
+        <ul>
+        {% for band in row %}
+            <div class="media">
+                <a href="{% url 'band_url' band.id %}">
+                    <li><h3>{{ band.name }}</h3></li>
+                </a>
+            </div>
+        {% endfor %}
+    {% endfor %}
+</ul>
+{% endblock %}

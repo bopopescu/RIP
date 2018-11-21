@@ -1,11 +1,11 @@
 {% extends 'base.html' %}
-{%  block title %}
+{% block title %}
     {{ member.first_name }} {{ member.last_name }}
 {% endblock %}
 
 {% block body %}
-            <h3>{{ member.first_name }} {{ member.last_name }}</h3>
-                <img src="/static/{{ member.photo }}" style="width: 500px">
-                <h5>Дата рождения: {{ member.birthdate }} <br>
-                Страна: {{ member.country }}</h5>
+    <h3>{{ member.first_name }} {{ member.last_name }}</h3>
+    <img src="/static/{{ member.photo }}" style="width: 500px">
+    <h5>Дата рождения: {{ member.birthdate }} <br>
+        Страна: {{ member.country }}</h5>
 {% endblock %}

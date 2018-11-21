@@ -1,6 +1,8 @@
 from django import forms
 from django.contrib.auth.forms import AuthenticationForm, UsernameField, UserCreationForm
 
+from MMB.models import BandModel, MemberModel, MembershipModel
+
 
 class LoginForm(forms.Form):
     """ Base class for authenticating users. Extend this to get a form that accepts
@@ -62,3 +64,37 @@ class EnterForm(forms.Form):
 
         self.fields['password'].widget.attrs.update({'type': 'password', 'class': 'form-control',
                                                      'id': 'exampleInputPassword1', 'placeholder': 'Пароль'})
+
+
+class BandForm(forms.ModelForm):
+    class Meta:
+        model = BandModel
+        exclude = ['/static/']
+
+    name = forms.CharField(label="Название")
+    genre = forms.CharField(label="Жанр")
+    history = forms.CharField(label="О группе")
+    pic = forms.FileField(label="Выберите файл", allow_empty_file=True)
+
+    def __init__(self, *args, **kwargs):
+        super(BandForm, self).__init__(*args, **kwargs)
+        self.fields['name'].widget.attrs.update({'class': 'form-control', 'placeholder': 'Название'})
+        self.fields['genre'].widget.attrs.update({'class': 'form-control', 'placeholder': 'Жанр'})
+
+
+class MemberForm(forms.ModelForm):
+    class Meta:
+        model = MemberModel
+        exclude = ['/static/']
+
+    first_name = forms.CharField(label="Имя")
+    last_name = forms.CharField(label="Фамилия")
+    birthdate = forms.DateField(label="Дата рождения")
+    deathdate = forms.DateField(label="Дата смерти")
+    country = forms.CharField(label="Страна")
+    photo = forms.FileField(label="Выберите файл", allow_empty_file=True)
+
+    def __init__(self, *args, **kwargs):
+        super(BandForm, self).__init__(*args, **kwargs)
+        self.fields['first_name'].widget.attrs.update({'class': 'form-control', 'placeholder': 'Имя'})
+        self.fields['last_name'].widget.attrs.update({'class': 'form-control', 'placeholder': 'Фамилия'})

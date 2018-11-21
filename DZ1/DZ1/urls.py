@@ -17,17 +17,18 @@ from django.conf.urls import url
 from django.contrib import admin
 from django.urls import path
 
-from MMB.views import Start, MembersView, MemberView, BandsView, BandView, LogoutView, registration, login, TitlesView
+from MMB.views import MembersView, MemberView, BandsView, BandView, registration, login, TitlesView, \
+    logoutView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    url(r'^$', Start.as_view()),
+    url(r'^$', login),
     url(r'^member/$', MembersView.as_view()),
     url(r'^member/(?P<id>\d+)$', MemberView.as_view(), name='member_url'),
     url(r'^band/$', BandsView.as_view()),
     url(r'^band/(?P<id>\d+)$', BandView.as_view(), name='band_url'),
-    path('logout/', LogoutView.as_view(), name='logout'),
-    path('login/', login),
-    path('registration/', registration),
-    path('start/', TitlesView.as_view())
+    url(r'^logout/', logoutView, name='logout'),
+    url(r'^login/', login),
+    url(r'^registration/', registration),
+    url(r'^start/', TitlesView.as_view())
 ]

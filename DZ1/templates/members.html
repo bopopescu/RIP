@@ -4,9 +4,9 @@
     <ul>
         {% for member in members %}
             <div class="media">
-            <a href="{% url 'member_url' member.id %}">
-                <li><h3>{{ member.first_name }} {{ member.last_name }}</h3></li>
-            </a>
+                <a href="{% url 'member_url' member.id %}">
+                    <li><h3>{{ member.first_name }} {{ member.last_name }}</h3></li>
+                </a>
             </div>
         {% endfor %}
     </ul>
