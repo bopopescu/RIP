@@ -23,6 +23,7 @@ class BandModel(models.Model):
     class Meta:
         db_table = 'band'
 
+
     name = models.CharField(max_length=30)
     members = models.ManyToManyField(MemberModel, through='MembershipModel', null=True, blank=True)
     genre = models.CharField(max_length=50)
@@ -38,11 +39,11 @@ class MembershipModel(models.Model):
     class Meta:
         db_table = 'membership'
 
-    id_member = models.ForeignKey(MemberModel, on_delete=models.CASCADE)
-    id_band = models.ForeignKey(BandModel, on_delete=models.CASCADE)
+    id_member_FK = models.ForeignKey(MemberModel, on_delete=models.CASCADE, db_column='id_member_FK')
+    id_band_FK = models.ForeignKey(BandModel, on_delete=models.CASCADE, db_column='id_band_FK')
     function = models.CharField(max_length=50)
     statuss = models.BooleanField(default=1)
 
 
 def __str__(self):
-    return "Band: {}, Member: {}".format(self.id_band, self.id_member)
+    return "Band: {}, Member: {}".format(self.id_band_FK, self.id_member_FK)

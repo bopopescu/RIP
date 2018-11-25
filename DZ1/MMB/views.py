@@ -9,7 +9,7 @@ from django.views import View
 from django.views.generic import ListView
 
 from MMB.forms import RegistrationForm, EnterForm, LoginForm
-from MMB.models import MemberModel, BandModel
+from MMB.models import MemberModel, BandModel, MembershipModel
 
 
 class Start(View):  # При входе, если не залогинен, открывается регистрация
@@ -101,11 +101,14 @@ class BandsView(ListView):
 class BandView(View):
     def get(self, request, id):
         band = BandModel.objects.get(id=int(id))
-        return render(request, 'band.html', {'band': band, 'username': auth.get_user(request).username, 'id': id})
+        members = band.members.all()
+        return render(request, 'band.html',
+                      {'band': band, 'members': members,
+                       'username': auth.get_user(request).username, 'id': id})
 
     def post(self, request, id):
         if request.method == 'POST':
-            if 'sign_in' in request.POST:  # по жмяку на кнопку
+            if 'sign_in' in request.POST:
                 return HttpResponseRedirect('/login/')
             elif 'sign_up' in request.POST:
                 return HttpResponseRedirect('/registration/')
