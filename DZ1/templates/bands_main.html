@@ -11,5 +11,40 @@
             </div>
         {% endfor %}
     {% endfor %}
+{% if username %}
+    <div class="add">
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal"
+                name="add_film">Добавить музыкальную группу
+        </button>
+    </div>
+{% endif %}
+
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Добавление группы</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form id="AddFilmForm" method="post" enctype="multipart/form-data" novalidate>
+                <div class="modal-body" style="width: 85%; padding: 15px">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Отмена</button>
+                    <button id="AddFilmFormButton" type="submit" class="btn btn-primary">Добавить</button>
+                    <div id="probka"></div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div id="film"></div>
+
 </ul>
 {% endblock %}

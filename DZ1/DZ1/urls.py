@@ -31,4 +31,5 @@ urlpatterns = [
     url(r'^login/', login),
     url(r'^registration/', registration),
     url(r'^start/', TitlesView.as_view())
+    # url(r'^me/', CustomerInDetail.as_view(), name='customers_detail')
 ]

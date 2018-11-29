@@ -12,11 +12,11 @@ class MemberModel(models.Model):
     birthdate = models.DateField()
     deathdate = models.DateField(null=True, blank=True)
     country = models.CharField(max_length=30)
-    photo = models.FileField(default='static/default.jpg', upload_to='static/', blank=True)
+    photo = models.FileField(default='static/media/default.jpg', upload_to='static/media/', blank=True)
 
 
 def __str__(self):
-    return "Name: {} {}".format(self.first_name, self.last_name)
+    return '%s %s' % (self.first_name, self.last_name)
 
 
 class BandModel(models.Model):
@@ -28,7 +28,7 @@ class BandModel(models.Model):
     members = models.ManyToManyField(MemberModel, through='MembershipModel', null=True, blank=True)
     genre = models.CharField(max_length=50)
     history = models.CharField(max_length=255, null=True, blank=True)
-    pic = models.FileField(default='static/default.jpg', upload_to='static/')
+    pic = models.FileField(default='static/media/default.jpg', upload_to='static/media/')
 
 
 def __str__(self):

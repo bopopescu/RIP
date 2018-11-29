@@ -8,7 +8,7 @@ from django.shortcuts import render
 from django.views import View
 from django.views.generic import ListView
 
-from MMB.forms import RegistrationForm, EnterForm, LoginForm
+from MMB.forms import RegistrationForm, EnterForm, LoginForm, AddBandForm, AddMemberForm
 from MMB.models import MemberModel, BandModel, MembershipModel
 
 
@@ -32,7 +32,9 @@ class MembersView(View):
         # member = MemberModel(first_name="Брайан", last_name="Мэй", birthdate='1947-07-19', country='Великобритания', photo='May.jpg')
         # member.save()
         members = MemberModel.objects.all()
-        return render(request, 'members.html', {'members': members, 'username': auth.get_user(request).username})
+
+        form = AddMemberForm(request.POST or None)
+        return render(request, 'members.html', {'members': members, 'form': form, 'username': auth.get_user(request).username})
 
     def post(self, request):
         if request.method == 'POST':
@@ -43,6 +45,21 @@ class MembersView(View):
             elif 'logout' in request.POST:
                 auth.logout(request)
                 return HttpResponseRedirect('/login/')
+            elif 'add_member' in request.POST:
+                if auth.get_user(request):
+                    form = AddMemberForm(request.POST, request.FILES)
+                    if form.is_valid():
+                        member = MemberModel(first_name=form.cleaned_data['first_name'],
+                                             last_name=form.cleaned_data['last_name'],
+                                             birthdate=form.cleaned_data['birthdate'],
+                                             deathdate=form.cleaned_data['deathdate'],
+                                             country=form.cleaned_data['country'],
+                                             photo=form.cleaned_data['photo'])
+                        member.save()
+                        url = '/band/' + str(member.id) + '/'
+                        return HttpResponseRedirect(url)
+                else:
+                    return HttpResponseRedirect('/login/')
 
 
 class MemberView(View):
@@ -84,8 +101,10 @@ class BandsView(ListView):
         if len(row) > 0:
             rows.append(row)
 
+        form = AddBandForm(request.POST or None)
+
         return render(request, 'bands_main.html', {'bands': rows, 'page': page, 'pages_count': pages_count,
-                                                   'username': auth.get_user(request).username})
+                                                   'username': auth.get_user(request).username, 'form': form})
 
     def post(self, request):
         if request.method == 'POST':
@@ -96,6 +115,18 @@ class BandsView(ListView):
             elif 'logout' in request.POST:
                 auth.logout(request)
                 return HttpResponseRedirect('/login/')
+            elif 'add_band' in request.POST:
+                if auth.get_user(request):
+                    form = AddBandForm(request.POST, request.FILES)
+                    if form.is_valid():
+                        band = BandModel(name=form.cleaned_data['name'], members=form.cleaned_data['members'],
+                                         genre=form.cleaned_data['genre'],
+                                         history=form.cleaned_data['history'], pic=form.cleaned_data['pic'])
+                        band.save()
+                        url = '/band/' + str(band.id) + '/'
+                        return HttpResponseRedirect(url)
+                else:
+                    return HttpResponseRedirect('/login/')
 
 
 class BandView(View):

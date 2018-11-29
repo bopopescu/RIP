@@ -66,35 +66,42 @@ class EnterForm(forms.Form):
                                                      'id': 'exampleInputPassword1', 'placeholder': 'Пароль'})
 
 
-class BandForm(forms.ModelForm):
+class AddBandForm(forms.ModelForm):
     class Meta:
         model = BandModel
-        exclude = ['/static/']
+        # fields = ['name', 'genre', 'history', 'pic']
+        exclude = ['/static/media/']
+
 
     name = forms.CharField(label="Название")
+    members = forms.ModelMultipleChoiceField(label="Выберите членов группы", queryset=MemberModel.objects.all())  # чтобы только фамилии
     genre = forms.CharField(label="Жанр")
     history = forms.CharField(label="О группе")
     pic = forms.FileField(label="Выберите файл", allow_empty_file=True)
 
-    def __init__(self, *args, **kwargs):
-        super(BandForm, self).__init__(*args, **kwargs)
-        self.fields['name'].widget.attrs.update({'class': 'form-control', 'placeholder': 'Название'})
-        self.fields['genre'].widget.attrs.update({'class': 'form-control', 'placeholder': 'Жанр'})
+    def __init__(self, *args, **kwargs):  # полписи в полях заполнения
+        super(AddBandForm, self).__init__(*args, **kwargs)
+        # self.fields['name'].widget.attrs.update({'class': 'form-control', 'placeholder': 'Введите название'})
+        # self.fields['genre'].widget.attrs.update({'class': 'form-control', 'placeholder': 'Введите жанр'})
+        self.fields['members'].widget = forms.widgets.MultipleHiddenInput()
+        self.fields["members"].queryset = MemberModel.objects.all()
 
 
-class MemberForm(forms.ModelForm):
+class AddMemberForm(forms.ModelForm):
     class Meta:
         model = MemberModel
-        exclude = ['/static/']
+        exclude = ['/static/media/']
 
     first_name = forms.CharField(label="Имя")
     last_name = forms.CharField(label="Фамилия")
-    birthdate = forms.DateField(label="Дата рождения")
-    deathdate = forms.DateField(label="Дата смерти")
+    birthdate = forms.DateField(label="Дата рождения", input_formats='%d/%m/%Y')
+    deathdate = forms.DateField(label="Дата смерти", input_formats='%d/%m/%Y')
     country = forms.CharField(label="Страна")
     photo = forms.FileField(label="Выберите файл", allow_empty_file=True)
 
     def __init__(self, *args, **kwargs):
-        super(BandForm, self).__init__(*args, **kwargs)
-        self.fields['first_name'].widget.attrs.update({'class': 'form-control', 'placeholder': 'Имя'})
-        self.fields['last_name'].widget.attrs.update({'class': 'form-control', 'placeholder': 'Фамилия'})
+        super(AddMemberForm, self).__init__(*args, **kwargs)
+        self.fields['first_name'].widget.attrs.update({'class': 'form-control'})
+        self.fields['last_name'].widget.attrs.update({'class': 'form-control'})
+        self.fields['birthdate'].widget.attrs.update({'class': 'form-control', 'placeholder': 'dd/mm/yyyy'})
+        self.fields['deathdate'].widget.attrs.update({'class': 'form-control', 'placeholder': 'dd/mm/yyyy'})
