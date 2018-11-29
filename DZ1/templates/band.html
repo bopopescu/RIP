@@ -5,10 +5,10 @@
 
 {% block body %}
     <h1>{{ band.name }}<br>
-        <img src="/static/media/{{ band.pic }}" style="background-size: 200px"><br>
+        <img src="/{{ band.pic }}" style="background-size: 200px"><br>
     </h1>
     <h3>Жанр:</h3> {{ band.genre }}
-    <h3>Страна:</h3> {{ band.history }}
+    <h3>История группы:</h3> {{ band.history }}
     <h3>Участники:</h3>
     {% for member in members %}
         <a href="{% url 'member_url' member.id %}" style="color: #004085;">

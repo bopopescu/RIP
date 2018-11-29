@@ -23,7 +23,6 @@ class BandModel(models.Model):
     class Meta:
         db_table = 'band'
 
-
     name = models.CharField(max_length=30)
     members = models.ManyToManyField(MemberModel, through='MembershipModel', null=True, blank=True)
     genre = models.CharField(max_length=50)

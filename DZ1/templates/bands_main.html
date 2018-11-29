@@ -11,13 +11,14 @@
             </div>
         {% endfor %}
     {% endfor %}
-{% if username %}
-    <div class="add">
-        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal"
-                name="add_film">Добавить музыкальную группу
-        </button>
-    </div>
-{% endif %}
+
+
+<div class="add">
+    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal"
+            name="add_film">Добавить музыкальную группу
+    </button>
+</div>
+
 
 <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
      aria-hidden="true">
@@ -36,7 +37,8 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Отмена</button>
-                    <button id="AddFilmFormButton" type="submit" class="btn btn-primary">Добавить</button>
+                    <button id="AddFilmFormButton" type="submit" class="btn btn-primary" name="add_band">Добавить
+                    </button>
                     <div id="probka"></div>
                 </div>
             </form>

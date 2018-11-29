@@ -1,9 +1,10 @@
+import json
 import math
 
 from django.contrib import auth
 from django.contrib.auth import logout
 from django.contrib.auth.models import User
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import render
 from django.views import View
 from django.views.generic import ListView
@@ -34,7 +35,8 @@ class MembersView(View):
         members = MemberModel.objects.all()
 
         form = AddMemberForm(request.POST or None)
-        return render(request, 'members.html', {'members': members, 'form': form, 'username': auth.get_user(request).username})
+        return render(request, 'members.html',
+                      {'members': members, 'form': form, 'username': auth.get_user(request).username})
 
     def post(self, request):
         if request.method == 'POST':
@@ -46,20 +48,19 @@ class MembersView(View):
                 auth.logout(request)
                 return HttpResponseRedirect('/login/')
             elif 'add_member' in request.POST:
-                if auth.get_user(request):
-                    form = AddMemberForm(request.POST, request.FILES)
-                    if form.is_valid():
-                        member = MemberModel(first_name=form.cleaned_data['first_name'],
-                                             last_name=form.cleaned_data['last_name'],
-                                             birthdate=form.cleaned_data['birthdate'],
-                                             deathdate=form.cleaned_data['deathdate'],
-                                             country=form.cleaned_data['country'],
-                                             photo=form.cleaned_data['photo'])
-                        member.save()
-                        url = '/band/' + str(member.id) + '/'
-                        return HttpResponseRedirect(url)
+                form = AddMemberForm(request.POST, request.FILES)
+                if form.is_valid():
+                    member = MemberModel(first_name=form.cleaned_data['first_name'],
+                                         last_name=form.cleaned_data['last_name'],
+                                         birthdate=form.cleaned_data['birthdate'],
+                                         deathdate=form.cleaned_data['deathdate'],
+                                         country=form.cleaned_data['country'],
+                                         photo=form.cleaned_data['photo'])
+                    member.save()
+                    url = '/member/' + str(member.id)
+                    return HttpResponseRedirect(url)
                 else:
-                    return HttpResponseRedirect('/login/')
+                    return HttpResponseRedirect('/login/')# заменить на сообщение об ошибке
 
 
 class MemberView(View):
@@ -82,7 +83,7 @@ class BandsView(ListView):
     def get(self, request, page=1):
         # member = MemberModel(first_name="Брайан", last_name="Мэй", birthdate='1947-07-19', country='Великобритания', photo='May.jpg')
         # member.save()
-        elements_on_page = 2
+        elements_on_page = 5
         elements_in_row = 1
         bands = BandModel.objects.all()
         pages_count = math.ceil(len(bands) / elements_on_page)
@@ -117,16 +118,22 @@ class BandsView(ListView):
                 return HttpResponseRedirect('/login/')
             elif 'add_band' in request.POST:
                 if auth.get_user(request):
+                    names_dict = {}
+                    errors = []
                     form = AddBandForm(request.POST, request.FILES)
                     if form.is_valid():
-                        band = BandModel(name=form.cleaned_data['name'], members=form.cleaned_data['members'],
+                        band = BandModel(name=form.cleaned_data['name'],
                                          genre=form.cleaned_data['genre'],
-                                         history=form.cleaned_data['history'], pic=form.cleaned_data['pic'])
+                                         history=form.cleaned_data['history'],
+                                         pic=form.cleaned_data['pic'])
                         band.save()
-                        url = '/band/' + str(band.id) + '/'
+
+                        url = '/band/' + str(band.id)
                         return HttpResponseRedirect(url)
+                    # json_response = json.dumps({'errors': errors, 'msg': msg})
+                    # return HttpResponse(content_type="application/json")
                 else:
-                    return HttpResponseRedirect('/login/')
+                    return HttpResponseRedirect('/login/')# заменить на сообщение об ошибке
 
 
 class BandView(View):
