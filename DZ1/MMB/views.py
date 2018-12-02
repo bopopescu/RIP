@@ -4,22 +4,22 @@ import math
 from django.contrib import auth
 from django.contrib.auth import logout
 from django.contrib.auth.models import User
-from django.http import HttpResponseRedirect, HttpResponse
+from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.views import View
 from django.views.generic import ListView
 
-from MMB.forms import RegistrationForm, EnterForm, LoginForm, AddBandForm, AddMemberForm
+from MMB.forms import RegistrationForm, EnterForm, LoginForm, AddBandForm, AddMemberForm, MembershipForm
 from MMB.models import MemberModel, BandModel, MembershipModel
 
 
-class Start(View):  # При входе, если не залогинен, открывается регистрация
+class Start(View):
     def get(self, request):
         return render(request, 'main_page.html')
 
     def post(self, request):
         if request.method == 'POST':
-            if 'sign_in' in request.POST:  # по жмяку на кнопку
+            if 'sign_in' in request.POST:
                 return HttpResponseRedirect('/login/')
             elif 'sign_up' in request.POST:
                 return HttpResponseRedirect('/registration/')
@@ -30,8 +30,6 @@ class Start(View):  # При входе, если не залогинен, от�
 
 class MembersView(View):
     def get(self, request):
-        # member = MemberModel(first_name="Брайан", last_name="Мэй", birthdate='1947-07-19', country='Великобритания', photo='May.jpg')
-        # member.save()
         members = MemberModel.objects.all()
 
         form = AddMemberForm(request.POST or None)
@@ -40,7 +38,7 @@ class MembersView(View):
 
     def post(self, request):
         if request.method == 'POST':
-            if 'sign_in' in request.POST:  # по жмяку на кнопку
+            if 'sign_in' in request.POST:
                 return HttpResponseRedirect('/login/')
             elif 'sign_up' in request.POST:
                 return HttpResponseRedirect('/registration/')
@@ -50,17 +48,16 @@ class MembersView(View):
             elif 'add_member' in request.POST:
                 form = AddMemberForm(request.POST, request.FILES)
                 if form.is_valid():
-                    member = MemberModel(first_name=form.cleaned_data['first_name'],
-                                         last_name=form.cleaned_data['last_name'],
-                                         birthdate=form.cleaned_data['birthdate'],
-                                         deathdate=form.cleaned_data['deathdate'],
-                                         country=form.cleaned_data['country'],
-                                         photo=form.cleaned_data['photo'])
+                    member = MemberModel(
+                        first_name=form.cleaned_data['first_name'],
+                        last_name=form.cleaned_data['last_name'],
+                        birthdate=form.cleaned_data['birthdate'],
+                        deathdate=form.cleaned_data['deathdate'],
+                        country=form.cleaned_data['country'],
+                        photo=form.cleaned_data['photo'])
                     member.save()
                     url = '/member/' + str(member.id)
-                    return HttpResponseRedirect(url)
-                else:
-                    return HttpResponseRedirect('/login/')# заменить на сообщение об ошибке
+                    return HttpResponseRedirect(url)  # заменить на сообщение об ошибке
 
 
 class MemberView(View):
@@ -102,49 +99,14 @@ class BandsView(ListView):
         if len(row) > 0:
             rows.append(row)
 
+        members = MemberModel.objects.all()
         form = AddBandForm(request.POST or None)
 
-        return render(request, 'bands_main.html', {'bands': rows, 'page': page, 'pages_count': pages_count,
-                                                   'username': auth.get_user(request).username, 'form': form})
+        return render(request, 'bands_main.html',
+                      {'members': members, 'bands': rows, 'page': page, 'pages_count': pages_count,
+                       'username': auth.get_user(request).username, 'form': form})
 
     def post(self, request):
-        if request.method == 'POST':
-            if 'sign_in' in request.POST:  # по жмяку на кнопку
-                return HttpResponseRedirect('/login/')
-            elif 'sign_up' in request.POST:
-                return HttpResponseRedirect('/registration/')
-            elif 'logout' in request.POST:
-                auth.logout(request)
-                return HttpResponseRedirect('/login/')
-            elif 'add_band' in request.POST:
-                if auth.get_user(request):
-                    names_dict = {}
-                    errors = []
-                    form = AddBandForm(request.POST, request.FILES)
-                    if form.is_valid():
-                        band = BandModel(name=form.cleaned_data['name'],
-                                         genre=form.cleaned_data['genre'],
-                                         history=form.cleaned_data['history'],
-                                         pic=form.cleaned_data['pic'])
-                        band.save()
-
-                        url = '/band/' + str(band.id)
-                        return HttpResponseRedirect(url)
-                    # json_response = json.dumps({'errors': errors, 'msg': msg})
-                    # return HttpResponse(content_type="application/json")
-                else:
-                    return HttpResponseRedirect('/login/')# заменить на сообщение об ошибке
-
-
-class BandView(View):
-    def get(self, request, id):
-        band = BandModel.objects.get(id=int(id))
-        members = band.members.all()
-        return render(request, 'band.html',
-                      {'band': band, 'members': members,
-                       'username': auth.get_user(request).username, 'id': id})
-
-    def post(self, request, id):
         if request.method == 'POST':
             if 'sign_in' in request.POST:
                 return HttpResponseRedirect('/login/')
@@ -153,6 +115,64 @@ class BandView(View):
             elif 'logout' in request.POST:
                 auth.logout(request)
                 return HttpResponseRedirect('/login/')
+            elif 'add_band' in request.POST:
+                if auth.get_user(request):
+                    errors = []
+                    form = AddBandForm(request.POST, request.FILES)
+                    if form.is_valid():
+                        band = BandModel(
+                            name=form.cleaned_data['name'],
+                            members=form.cleaned_data['members'],
+                            genre=form.cleaned_data['genre'],
+                            history=form.cleaned_data['history'],
+                            pic=form.cleaned_data['pic'])
+                        band.save()
+                        MembershipModel.save_m2m()
+                        MemberModel.save_m2m()
+                        url = '/band/' + str(band.id)
+                        return HttpResponseRedirect(url)
+                    # json_response = json.dumps({'errors': errors, 'msg': msg})
+                    # return HttpResponse(content_type="application/json")
+                else:
+                    return HttpResponseRedirect('/login/')  # заменить на сообщение об ошибке
+
+
+class BandView(View):
+    def get(self, request, id):
+        band = BandModel.objects.get(id=int(id))
+        members = band.members.all()
+        new_members = MemberModel.objects.all()
+
+        form = MembershipForm(request.POST or None)
+        return render(request, 'band.html',
+                      {'band': band, 'members': members, 'new_members': new_members, 'form': form,
+                       'username': auth.get_user(request).username, 'id': id})
+
+    def post(self, request, id):
+        if request.method == 'POST':
+            errors = []
+            if 'sign_in' in request.POST:
+                return HttpResponseRedirect('/login/')
+            elif 'sign_up' in request.POST:
+                return HttpResponseRedirect('/registration/')
+            elif 'logout' in request.POST:
+                auth.logout(request)
+                return HttpResponseRedirect('/login/')
+            elif 'add_members' in request.POST:
+                form = MembershipForm(request.POST, request.FILES)
+
+                if form.is_valid():
+                    id_band_FK=BandModel.objects.get(id=id)
+                    membership = MembershipModel(
+                        id_member_FK=form.cleaned_data['id_member_FK'],
+                        id_band_FK=id_band_FK,
+                        function=form.cleaned_data['function'],
+                        statuss=form.cleaned_data['statuss'])
+                    membership.save()
+                    # BandModel.save()
+                    url = '/band/' + str(id)
+                    return HttpResponseRedirect(url)
+                # заменить на сообщение об ошибке
 
 
 def logoutView(request):

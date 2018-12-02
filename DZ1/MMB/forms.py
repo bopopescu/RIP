@@ -1,3 +1,5 @@
+from datetime import date
+
 from django import forms
 from django.contrib.auth.forms import AuthenticationForm, UsernameField, UserCreationForm
 
@@ -79,12 +81,8 @@ class AddBandForm(forms.Form):
 
     def __init__(self, *args, **kwargs):  # полписи в полях заполнения
         super(AddBandForm, self).__init__(*args, **kwargs)
-        # self.fields['name'].widget.attrs.update({'class': 'form-control', 'placeholder': 'Введите название'})
-        # self.fields['genre'].widget.attrs.update({'class': 'form-control', 'placeholder': 'Введите жанр'})
-        # self.fields['members'].widget = forms.widgets.MultipleHiddenInput()
-        # self.fields["members"].queryset = MemberModel.objects.all()
         self.fields['pic'].widget.attrs.update({'name': 'pic', 'label': 'Загрузить', 'type': 'file',
-                                                  'class': 'form-control-file', 'id': 'pic'})
+                                                'class': 'form-control-file', 'id': 'pic'})
 
 
 class AddMemberForm(forms.Form):
@@ -94,15 +92,31 @@ class AddMemberForm(forms.Form):
     first_name = forms.CharField(label="Имя")
     last_name = forms.CharField(label="Фамилия")
     birthdate = forms.DateField(label="Дата рождения")
-    deathdate = forms.DateField(label="Дата смерти")
+    deathdate = forms.DateField(label="Дата смерти", required=False)
     country = forms.CharField(label="Страна")
     photo = forms.FileField(label="Фото исполнителя", allow_empty_file=True)
 
     def __init__(self, *args, **kwargs):
         super(AddMemberForm, self).__init__(*args, **kwargs)
-        # self.fields['first_name'].widget.attrs.update({'class': 'form-control'})
-        # self.fields['last_name'].widget.attrs.update({'class': 'form-control'})
-        self.fields['birthdate'].widget.attrs.update({'class': 'form-control', 'placeholder': 'dd/mm/yyyy'})
-        self.fields['deathdate'].widget.attrs.update({'class': 'form-control', 'placeholder': 'dd/mm/yyyy'})
+        self.fields['birthdate'].widget.attrs.update({'class': 'form-control', 'placeholder': 'mm/dd/yyyy'})
+        self.fields['deathdate'].widget.attrs.update({'class': 'form-control', 'placeholder': 'mm/dd/yyyy'})
         self.fields['photo'].widget.attrs.update({'name': 'photo', 'label': 'Загрузить', 'type': 'file',
                                                   'class': 'form-control-file', 'id': 'photo'})
+
+
+class MembershipForm(forms.Form):
+    class Meta:
+        model = MembershipModel
+        exclude = ['id_member_FK', 'id_band_FK']
+
+    id_member_FK=forms.ModelChoiceField(queryset=MemberModel.objects.all())
+    id_band_FK=forms.ModelChoiceField(queryset=BandModel.objects.all(), required=False)
+    function = forms.CharField(label="Должность")
+    statuss = forms.BooleanField(label="Все еще в группе?", required=False)
+
+    #def __init__(self, *args, **kwargs):
+    #    super(MembershipModel, self).__init__(*args, **kwargs)
+    #    self.fields
+    # self.fields['title'].widget.attrs.update({'type': 'email', 'class': 'form-control','id': 'title', 'aria-describedby': 'emailHelp','placeholder': 'Введите Заголовок'})
+    # self.fields['reviewText'].widget.attrs.update({'type': 'email', 'class': 'form-control','id': 'description', 'aria-describedby': 'emailHelp','placeholder': 'Введите Отзыв'})
+    # self.fields["members"].queryset = MemberModel.objects.all()

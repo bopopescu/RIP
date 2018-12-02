@@ -16,7 +16,7 @@ class MemberModel(models.Model):
 
 
 def __str__(self):
-    return '%s %s' % (self.first_name, self.last_name)
+    return self.last_name
 
 
 class BandModel(models.Model):
@@ -31,15 +31,15 @@ class BandModel(models.Model):
 
 
 def __str__(self):
-    return "Name: {}".format(self.name)
+    return self.name
 
 
 class MembershipModel(models.Model):
     class Meta:
         db_table = 'membership'
 
-    id_member_FK = models.ForeignKey(MemberModel, on_delete=models.CASCADE, db_column='id_member_FK')
-    id_band_FK = models.ForeignKey(BandModel, on_delete=models.CASCADE, db_column='id_band_FK')
+    id_member_FK = models.ForeignKey(MemberModel, on_delete=models.CASCADE, db_column='id_member_FK', related_name='id_member_FK')
+    id_band_FK = models.ForeignKey(BandModel, on_delete=models.CASCADE, db_column='id_band_FK', related_name='id_band_FK')
     function = models.CharField(max_length=50)
     statuss = models.BooleanField(default=1)
 
