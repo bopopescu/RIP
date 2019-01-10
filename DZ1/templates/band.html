@@ -5,26 +5,26 @@
 
 {% block body %}
     <div style="display: inline; float: left; width: 70%; padding: 10px 60px;">
-    <h1>{{ band.name }}<br>
-        <img src="/{{ band.pic }}" style="background-size: 200px"><br>
-    </h1>
-    <h3>Жанр:</h3> {{ band.genre }}
-    <h3>История группы:</h3> {{ band.history }}
-    <h3>Участники:</h3>
-    {% for member in members %}
-        <a href="{% url 'member_url' member.id %}" style="color: #004085;">
-            <h5>{{ member.first_name }} {{ member.last_name }}</h5>
-        </a>
-    {% empty %}
-        Туть никого пока что
-    {% endfor %}
-    {% if username %}
-        <div class="add">
-            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal"
-                    name="add_member1">Добавить музыканта
-            </button>
-        </div>
-    {% endif %}
+        <h1>{{ band.name }}<br>
+            <img src="/{{ band.pic }}" style="background-size: 200px"><br>
+        </h1>
+        <h3>Жанр:</h3> {{ band.genre }}
+        <h3>История группы:</h3> {{ band.history }}
+        <h3>Участники:</h3>
+        {% for member in members %}
+            <a href="{% url 'member_url' member.id %}" style="color: #004085;">
+                <h5>{{ member.first_name }} {{ member.last_name }}</h5>
+            </a>
+        {% empty %}
+            Туть никого пока что
+        {% endfor %}
+        {% if username %}
+            <div class="add">
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal"
+                        name="add_member1">Добавить музыканта
+                </button>
+            </div>
+        {% endif %}
     </div>
 
     <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"

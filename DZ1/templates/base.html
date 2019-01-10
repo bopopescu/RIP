@@ -34,7 +34,8 @@
         $('a[href="' + location.pathname + '"]').closest('li').addClass('active');
     });
     // Бесконечная прокрутка
-    var pageNumber = {{ page }}
+    var pageNumber =
+    {{ page }}
     var pagesCount = {{ pages_count }} // количество страниц
         //Обнаружение конца страницы и загрузка новых элементов
         $(window).scroll(

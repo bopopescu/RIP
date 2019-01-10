@@ -1,6 +1,6 @@
 from django.db import models
 
-from django.contrib.auth.models import User, AbstractUser
+from django.contrib.auth.models import User
 
 
 class MemberModel(models.Model):
@@ -47,6 +47,13 @@ class MembershipModel(models.Model):
 def __str__(self):
     return "Band: {}, Member: {}".format(self.id_band_FK, self.id_member_FK)
 
-class UserModel(User):
+class UserModel(models.Model):
     class Meta:
-        db_table = 'user'
+        db_table = 'avatar'
+
+    #id_user_FK = models.ForeignKey(User, on_delete=models.CASCADE, db_column='id_user_FK', related_name='id_user_FK')
+    username = models.CharField(max_length=150)
+    ava = models.FileField(default='static/media/ava/default.jpg', upload_to='static/media/ava/')
+
+def __str__(self):
+    return "User: {}, Avatar: {}".format(self.username, self.ava)

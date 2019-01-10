@@ -5,9 +5,9 @@
 
 {% block body %}
     <div style="display: inline; float: left; width: 70%; padding: 10px 60px;">
-    <h3>{{ member.first_name }} {{ member.last_name }}</h3>
-    <img src="/{{ member.photo }}" style="width: 500px">
-    <h5>Дата рождения: {{ member.birthdate }} <br>
-        Страна: {{ member.country }}</h5>
+        <h3>{{ member.first_name }} {{ member.last_name }}</h3>
+        <img src="/{{ member.photo }}" style="width: 500px">
+        <h5>Дата рождения: {{ member.birthdate }} <br>
+            Страна: {{ member.country }}</h5>
     </div>
 {% endblock %}

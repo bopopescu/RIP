@@ -18,7 +18,7 @@ from django.contrib import admin
 from django.urls import path
 
 from MMB.views import MembersView, MemberView, BandsView, BandView, registration, login, TitlesView, \
-    logoutView, ProfileView
+    logoutView, ProfileView, UpdateProfileView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -31,6 +31,7 @@ urlpatterns = [
     url(r'^login/', login),
     url(r'^registration/', registration),
     url(r'^start/', TitlesView.as_view()),
-    url(r'^profile/', ProfileView.as_view())
+    url(r'^profile/', ProfileView.as_view()),
+    url(r'^update_profile/', UpdateProfileView.as_view())
     # url(r'^me/', CustomerInDetail.as_view(), name='customers_detail')
 ]

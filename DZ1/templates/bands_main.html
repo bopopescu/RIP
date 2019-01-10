@@ -13,20 +13,20 @@
     {% endif %}
 
     <div id="band-pages">
-            {% for band in bands %}
-                <ul>
-                    <div id="row">
-                        <div style="float: left; width: 70%; padding-left: 40px;">
-                            <div class="media">
-                                <a href="{% url 'band_url' band.id %}">
-                                    <li><h3>{{ band.name|upper }}</h3></li>
-                                    <img src="/{{ band.pic }}" style="background-size: 200px"><br>
-                                </a>
-                            </div>
+        {% for band in bands %}
+            <ul>
+                <div id="row">
+                    <div style="float: left; width: 70%; padding-left: 40px;">
+                        <div class="media">
+                            <a href="{% url 'band_url' band.id %}">
+                                <li><h3>{{ band.name|upper }}</h3></li>
+                                <img src="/{{ band.pic }}" style="background-size: 200px"><br>
+                            </a>
                         </div>
                     </div>
-                </ul>
-            {% endfor %}
+                </div>
+            </ul>
+        {% endfor %}
 
 
         <div class="pagination" style="float: left; width: 70%; padding: 20px 80px;">

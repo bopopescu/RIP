@@ -2,6 +2,8 @@ from datetime import date
 
 from django import forms
 from django.contrib.auth.forms import AuthenticationForm, UsernameField, UserCreationForm
+from django.contrib.auth.models import User
+from django.forms import ModelForm
 
 from MMB.models import BandModel, MemberModel, MembershipModel
 
@@ -109,14 +111,20 @@ class MembershipForm(forms.Form):
         model = MembershipModel
         exclude = ['id_member_FK', 'id_band_FK']
 
-    id_member_FK=forms.ModelChoiceField(queryset=MemberModel.objects.all())
-    id_band_FK=forms.ModelChoiceField(queryset=BandModel.objects.all(), required=False)
+    id_member_FK = forms.ModelChoiceField(queryset=MemberModel.objects.all())
+    id_band_FK = forms.ModelChoiceField(queryset=BandModel.objects.all(), required=False)
     function = forms.CharField(label="Должность")
     statuss = forms.BooleanField(label="Все еще в группе?", required=False)
 
-    #def __init__(self, *args, **kwargs):
-    #    super(MembershipModel, self).__init__(*args, **kwargs)
-    #    self.fields
-    # self.fields['title'].widget.attrs.update({'type': 'email', 'class': 'form-control','id': 'title', 'aria-describedby': 'emailHelp','placeholder': 'Введите Заголовок'})
-    # self.fields['reviewText'].widget.attrs.update({'type': 'email', 'class': 'form-control','id': 'description', 'aria-describedby': 'emailHelp','placeholder': 'Введите Отзыв'})
-    # self.fields["members"].queryset = MemberModel.objects.all()
+
+class UpdateProfileForm(ModelForm):
+    class Meta:
+        model = User
+        fields = ('username', 'email', 'first_name', 'last_name')
+
+    '''username = forms.CharField(min_length=5, label='Логин')
+    password = forms.CharField(min_length=8, widget=forms.PasswordInput, label='Пароль')
+    password2 = forms.CharField(min_length=8, widget=forms.PasswordInput, label='Повторите пароль')
+    email = forms.EmailField(label='Email')
+    first_name = forms.CharField(label='Имя')
+    last_name = forms.CharField(label='Фамилия')'''

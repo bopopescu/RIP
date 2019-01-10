@@ -4,18 +4,16 @@
 {% block body %}
     <form method="post">
         {% csrf_token %}
+    <div class="out" style="margin: 10px 60px;">
         {% if username %}
-            <div class="out" style="margin: 10px 60px;">
                 <button class="btn btn-primary" type="submit" data-toggle="modal" data-target="#exampleModal"
                         name="band">Группы
                 </button>
-            </div>
-            <div class="out" style="margin: 10px 60px;">
                 <button class="btn btn-primary" type="submit" data-toggle="modal" data-target="#exampleModal"
                         name="member">Музыканты
                 </button>
-            </div>
         {% endif %}
+    </div>
     </form>
     <form method="post">
         {% csrf_token %}
