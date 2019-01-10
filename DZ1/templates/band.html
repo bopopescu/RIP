@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+{% block title %}
+    {{ band.name }}
+{% endblock %}
+
+{% block body %}
+    <h1>{{ band.name }}<br>
+        <img src="/{{ band.pic }}" style="background-size: 200px"><br>
+    </h1>
+    <h3>Жанр:</h3> {{ band.genre }}
+    <h3>История группы:</h3> {{ band.history }}
+    <h3>Участники:</h3>
+    {% for member in members %}
+        <a href="{% url 'member_url' member.id %}" style="color: #004085;">
+            <h5>{{ member.first_name }} {{ member.last_name }}</h5>
+        </a>
+    {% empty %}
+        Туть никого пока что
+    {% endfor %}
+    {% if username %}
+        <div class="add">
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal"
+                    name="add_member1">Добавить музыканта
+            </button>
+        </div>
+    {% endif %}
+
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Добавление музыкантов</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+
+
+                <form method="post" enctype="multipart/form-data" novalidate>
+                    <div class="modal-body" style="width: 85%; padding: 15px">
+                        {% csrf_token %}
+                        <p><label for="id_id_band_FK">Группа:</label>
+                            <label name="id_band_FK" required id="id_id_band_FK"
+                                   value="{{ band.id }}">{{ band.name }}</label></p>
+
+                        <p><label for="id_id_member_FK">Выберите члена группы:</label>
+                            <select name="id_member_FK" required id="id_id_member_FK">
+                                <option value selected>------------</option>
+                                {% for member in new_members %}
+                                    <option value="{{ member.id }}">{{ member.first_name }} {{ member.last_name }}</option>
+                                {% endfor %}</select></p>
+
+                        <p><label for="id_function">Должность:</label>
+                            <input type="text" name="function" required id="id_function"></p>
+
+                        <p><label for="id_statuss">Все еще в группе?</label>
+                            <input type="checkbox" name="statuss" id="id_statuss"></p>
+
+                    </div>
+
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Отмена</button>
+                        <button type="submit" class="btn btn-primary" name="add_members">Добавить
+                        </button>
+                        <div id="probka"></div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+{% endblock %}

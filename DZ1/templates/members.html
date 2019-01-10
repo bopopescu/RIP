@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+{% block title %}Музыканты{% endblock %}
+{% block body %}
+    <ul>
+        {% for member in members %}
+            <div class="media">
+                <a href="{% url 'member_url' member.id %}">
+                    <li><h3>{{ member.first_name }} {{ member.last_name }}</h3></li>
+                </a>
+            </div>
+        {% endfor %}
+
+    {% if username %}
+        <div class="add">
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal"
+                    name="add_member1">Добавить музыканта
+            </button>
+        </div>
+    {% endif %}
+
+        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+             aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Добавление музыканта</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+
+                    <form method="post" enctype="multipart/form-data" novalidate>
+                        <div class="modal-body" style="width: 85%; padding: 15px">
+                            {% csrf_token %}
+                            {{ form.as_p }}
+                        </div>
+
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Отмена</button>
+                            <button type="submit" class="btn btn-primary" name="add_member">Добавить
+                            </button>
+                            <div id="probka"></div>
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+
+    </ul>
+{% endblock %}

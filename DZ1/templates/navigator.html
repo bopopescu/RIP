@@ -1,0 +1,29 @@
+<nav class="navbar navbar-expand-sm bg-dark bg-faded sticky-top">
+    <div class="container-fluid">
+        <ul class="nav navbar-nav">
+            <li>
+                <a class="navbar-brand" href="/start/">Музыкальный Флекс</a>
+            </li>
+            <li>
+                <a class="nav-link" href="/band/page=1">Группы</a>
+            </li>
+            <li>
+                <a class="nav-link" href="/member/">Музыканты</a>
+            </li>
+        </ul>
+        <ul class="nav navbar-nav ml-3">
+    <form method="post">
+        {% csrf_token %}
+        {% if username %}
+            <div>
+                <div class="out">
+                    <li style="color: white;">{{ username }}
+                    <button class="btn btn-primary" type="submit" name="logout">Выйти</button>
+                    </li>
+                </div>
+            </div>
+        {% endif %}
+            </form>
+        </ul>
+    </div>
+</nav>
