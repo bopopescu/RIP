@@ -5,12 +5,12 @@
     <form method="post">
         {% csrf_token %}
         {% if username %}
-            <div class="out">
+            <div class="out" style="margin: 10px 60px;">
                 <button class="btn btn-primary" type="submit" data-toggle="modal" data-target="#exampleModal"
                         name="band">Группы
                 </button>
             </div>
-            <div class="out">
+            <div class="out" style="margin: 10px 60px;">
                 <button class="btn btn-primary" type="submit" data-toggle="modal" data-target="#exampleModal"
                         name="member">Музыканты
                 </button>

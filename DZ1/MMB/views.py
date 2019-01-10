@@ -8,6 +8,7 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.views import View
 from django.views.generic import ListView
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 from MMB.forms import RegistrationForm, EnterForm, LoginForm, AddBandForm, AddMemberForm, MembershipForm
 from MMB.models import MemberModel, BandModel, MembershipModel
@@ -93,31 +94,40 @@ class BandsView(ListView):
     def get(self, request, page=1):
         # member = MemberModel(first_name="Брайан", last_name="Мэй", birthdate='1947-07-19', country='Великобритания', photo='May.jpg')
         # member.save()
-        elements_on_page = 2
-        #elements_in_row = 1
-        bands = BandModel.objects.all()
-        pages_count = math.ceil(len(bands) / elements_on_page)
+        '''elements_on_page = 2
+bands = BandModel.objects.all()
+pages_count = math.ceil(len(bands) / elements_on_page)
 
-        start_index = (int(page) - 1) * elements_on_page
-        end_index = start_index + elements_on_page
-        bands = bands[start_index:end_index]
+start_index = (int(page) - 1) * elements_on_page
+end_index = start_index + elements_on_page
+bands = bands[start_index:end_index]
 
-        index = 1
-        rows = []
-        row = []
-        for band in bands:
-            row.append(band)
-            index += 1 #index=3
+index = 1
+rows = []
+row = []
+for band in bands:
+    row.append(band)
+    index += 1  # index=3
 
-        if len(row) > 0: #2 группы
-            rows.append(row)
+if len(row) > 0:  # 2 группы
+    rows.append(row)'''
+
+        paginator = Paginator(BandModel.objects.all(), 2)
+        page = request.GET.get('page')
+        try:
+            rows = paginator.page(page)
+        except PageNotAnInteger:
+            # If page is not an integer, deliver first page.
+            rows = paginator.page(1)
+        except EmptyPage:
+            # If page is out of range (e.g. 9999), deliver last page of results.
+            rows = paginator.page(paginator.num_pages)
 
         members = MemberModel.objects.all()
         form = AddBandForm(request.POST or None)
-        #page=+1
 
         return render(request, 'bands_main.html',
-                      {'members': members, 'bands': rows, 'page': page, 'pages_count': pages_count,
+                      {'members': members, 'bands': rows, 'page': page,
                        'username': auth.get_user(request).username, 'form': form})
 
     def post(self, request):

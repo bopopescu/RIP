@@ -4,9 +4,11 @@
 {% endblock %}
 
 {% block body %}
-    <h3>Логин:</h3>
-    <label>{{ user.username }}<br>
-        <img src="/{{ user.username }}" style="background-size: 200px"><br></label>
-    <h3>ФИО:</h3> {{ user.last_name }} {{ user.first_name }}
-    <h3>Эл.почта:</h3> {{ user.email }}
+    <div class="out" style="margin: 10px 60px;">
+        <h3>Логин:</h3>
+        <label>{{ user.username }}<br>
+            <img src="/{{ user.username }}" style="background-size: 200px"><br></label>
+        <h3>ФИО:</h3> {{ user.last_name }} {{ user.first_name }}
+        <h3>Эл.почта:</h3> {{ user.email }}
+    </div>
 {% endblock %}

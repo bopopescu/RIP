@@ -47,9 +47,6 @@ class MembershipModel(models.Model):
 def __str__(self):
     return "Band: {}, Member: {}".format(self.id_band_FK, self.id_member_FK)
 
-'''class UserModel(AbstractUser):
-    #favorite_author = models.CharField(max_length=40, blank=True, verbose_name='Любимый автор')
-    about_me = models.TextField(max_length=1000, blank=True, verbose_name='О себе')
-    #books = models.ManyToManyField(Book, blank=True)
-    image = models.FileField(upload_to='avatars/', null=True, blank=True,
-                             default='avatars/default_avatar.png', verbose_name='Аватар')'''
+class UserModel(User):
+    class Meta:
+        db_table = 'user'

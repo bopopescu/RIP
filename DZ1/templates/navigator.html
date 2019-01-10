@@ -16,8 +16,9 @@
         {% csrf_token %}
         {% if username %}
             <div>
-                <div class="out">
-                    <li style="color: white;">{{ username }}
+                <div>
+                    <li style="color: white;">
+                        <a class="nav-item" style="color: white;" href="/profile/">{{ username }}</a>
                     <button class="btn btn-primary" type="submit" name="logout">Выйти</button>
                     </li>
                 </div>
