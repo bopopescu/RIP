@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block title %} Профиль {% endblock %}
+
+{% block body %}
+    {% include 'navigator.html' %}
+    <div class="out" style="margin: 10px 60px;">
+
+        <h3><a class="button primary" id="update">Обновляем фото:</a></h3>
+
+        <form method="post" enctype="multipart/form-data" id="update_form" class="is-hidden">{% csrf_token %}
+            {{ forma.as_p }}
+            <input type="submit" value="Обновить">
+        </form>
+        <a href="/profile">
+            <button type="submit" name="updated" class="btn btn-primary" id="updated">Отмена</button>
+        </a>
+        <script src="/static/js/update.js"></script>
+    </div>
+{% endblock %}

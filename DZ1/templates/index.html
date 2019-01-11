@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+{% block title %}Бесконечный скролл и добавление через js{% endblock %}
+
+{% block body %}
+
+
+    <a href="#" id="myBtn" style="padding-left: 30px;">Добавить новую группу</a>
+    <a href="/band/page=1" style="padding-left: 30px;">Вернуться в нормальный режим</a>
+
+
+    {% if band_list %}
+        <div id="bands">
+            {% for band in band_list %}
+                <div class="row" style="padding-left: 30px;">
+                <div class="col">
+                    <a href="/band/{{ band.id }}">
+                        <h2>{{ band.name }}</h2></a>
+                    <img src="/{{ band.pic }}" class="list_image">
+                </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    <div id="myModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <form method="post" enctype="multipart/form-data" id="form_create">
+                {% csrf_token %}
+                {{ form_create.as_p }}
+                <input type="submit" value="Добавить" id="add">
+            </form>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script src="/static/js/endless.js"></script>
+    <script src="/static/js/create.js"></script>
+{% endblock %}

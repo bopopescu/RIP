@@ -5,7 +5,7 @@ from django.contrib.auth.forms import AuthenticationForm, UsernameField, UserCre
 from django.contrib.auth.models import User
 from django.forms import ModelForm
 
-from MMB.models import BandModel, MemberModel, MembershipModel
+from MMB.models import BandModel, MemberModel, MembershipModel #, UserModel
 
 
 class LoginForm(forms.Form):
@@ -30,6 +30,7 @@ class RegistrationForm(forms.Form):
     email = forms.EmailField(label='Email')
     first_name = forms.CharField(label='Имя')
     last_name = forms.CharField(label='Фамилия')
+    avatar = forms.ImageField(label='Аватар')
 
     def __init__(self, *args, **kwargs):
         super(RegistrationForm, self).__init__(*args, **kwargs)
@@ -54,6 +55,9 @@ class RegistrationForm(forms.Form):
         self.fields['last_name'].widget.attrs.update({'type': 'email', 'class': 'form-control',
                                                       'id': 'exampleInputEmail1', 'aria-describedby': 'emailHelp',
                                                       'placeholder': 'Введите Фамилию'})
+        self.fields['avatar'].widget.attrs.update({'type': 'email', 'class': 'form-control',
+                                                      'id': 'exampleInputEmail1', 'aria-describedby': 'emailHelp',
+                                                      'placeholder': 'Выберите аватар'})
 
 
 class EnterForm(forms.Form):
@@ -122,9 +126,8 @@ class UpdateProfileForm(ModelForm):
         model = User
         fields = ('username', 'email', 'first_name', 'last_name')
 
-    '''username = forms.CharField(min_length=5, label='Логин')
-    password = forms.CharField(min_length=8, widget=forms.PasswordInput, label='Пароль')
-    password2 = forms.CharField(min_length=8, widget=forms.PasswordInput, label='Повторите пароль')
-    email = forms.EmailField(label='Email')
-    first_name = forms.CharField(label='Имя')
-    last_name = forms.CharField(label='Фамилия')'''
+
+'''class UpdateAvaForm(ModelForm):
+    class Meta:
+        model = UserModel
+        fields = ('avatar',)'''

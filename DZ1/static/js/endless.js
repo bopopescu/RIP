@@ -1,24 +1,30 @@
-// Загрузка элементов
-function loadBands(pageNumber) {
-    csrf_token = '{{ csrf_token }}';
+document.body.onload = function() {
+    var page = 2;
+    var pages = true;
+    window.onscroll = function() {
+        var scrollTop = (window.pageYOffset || document.documentElement.scrollTop) + document.documentElement.clientHeight;
+        var scrollHeight = Math.max(
+          document.body.scrollHeight, document.documentElement.scrollHeight,
+          document.body.offsetHeight, document.documentElement.offsetHeight,
+          document.body.clientHeight, document.documentElement.clientHeight
+        );
 
-    // Показываем загрузку
-    $("#band-pages").append("<p id=\"progress\" style=\"text-align: center;\n\">🔎 Loading..</p>");
-    console.log('Error with response:')
-    $.ajax({
-        url: 'band/page=' + pageNumber,
-        type: 'GET',
-        headers: {'X-CSRFToken': csrf_token},
-        success: function (response) {
-            // Удаляем загрузку
-            $('#progress').remove()
+        if ((scrollHeight - scrollTop < 10) && pages){
+            pages = false;
+            $.ajax({
+                type: 'GET',
+                url: '/bands/page=1?page=' + page.toString(),
 
-            // Добавляем новую порцию элементов
-            var rows = $(response).find('#row')
-            $('#band-pages').append(rows);
-        },
-        error: function (response) {
-            console.log('Error with response: ' + response) // ошибка загрузки порции
+                success: (result) => {
+                    $('#bands').append(result);
+                    page = page + 1;
+                    pages = true;
+                },
+
+                error: (result) => {
+                    pages = false;
+                }
+            });
         }
-    });
-}
+    }
+};

@@ -3,6 +3,7 @@ import math
 
 from django.contrib import auth
 from django.contrib.auth import logout
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
 from django.forms import model_to_dict
 from django.http import HttpResponseRedirect
@@ -12,8 +13,8 @@ from django.views.generic import ListView, UpdateView
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 from MMB.forms import RegistrationForm, EnterForm, LoginForm, AddBandForm, AddMemberForm, MembershipForm, \
-    UpdateProfileForm
-from MMB.models import MemberModel, BandModel, MembershipModel, UserModel
+    UpdateProfileForm  # , UpdateAvaForm
+from MMB.models import MemberModel, BandModel, MembershipModel  # , UserModel
 
 
 class Start(View):
@@ -66,16 +67,18 @@ class MembersView(View):
 class ProfileView(View):
     def get(self, request):
         user = User.objects.get(id=auth.get_user(request).id)
-        avatar = UserModel.objects.get(username=user.username)
-        form = UpdateProfileForm(
-            initial=model_to_dict(user, fields=['username', 'password', 'email', 'first_name', 'last_name']))
+        # avatar = UserModel.objects.get(nameofuser=str(user.username))
+        # ava_users=UserModel.objects.all()
+        # for us in ava_users:
+        #   if us==user.username:
+        #      avatar = UserModel.objects.get(username=user.username)
         return render(request, 'profile.html',
-                      {'user': user, 'form':form, 'username': auth.get_user(request).username, 'avatar': avatar})
+                      {'user': user, 'username': auth.get_user(request).username})
 
     def post(self, request):
-        #form = UpdateProfileForm(request.POST, request.FILES, instance=request.user)
-        #if form.is_valid():
-         #   form.save()
+        # form = UpdateProfileForm(request.POST, request.FILES, instance=request.user)
+        # if form.is_valid():
+        #   form.save()
         if request.method == 'POST':
             if 'logout' in request.POST:
                 auth.logout(request)
@@ -87,11 +90,16 @@ class ProfileView(View):
 class UpdateProfileView(View):
     def get(self, request):
         user = User.objects.get(id=auth.get_user(request).id)
-        avatar = UserModel.objects.get(username=user.username)
+        # avatar = UserModel.objects.get(username=user.username)
+        # old_name=user.username
         form = UpdateProfileForm(
             initial=model_to_dict(user, fields=['username', 'password', 'email', 'first_name', 'last_name']))
+        # if old_name!=user.username:
+        #    avatar.username = user.username
+        #    avatar.save()
+        # member.save()
         return render(request, 'update_profile.html',
-                      {'form': form, 'user': user, 'username': auth.get_user(request).username, 'avatar': avatar})
+                      {'form': form, 'user': user, 'username': auth.get_user(request).username})
 
     def post(self, request):
         form = UpdateProfileForm(request.POST, request.FILES, instance=request.user)
@@ -103,6 +111,26 @@ class UpdateProfileView(View):
                 return HttpResponseRedirect('/login/')
             if 'updated' or 'update' in request.POST:
                 return HttpResponseRedirect('/profile/')
+
+
+'''class UpdateAvaView(View):
+    def get(self, request):
+        user = User.objects.get(id=auth.get_user(request).id)
+        avatar = UserModel.objects.get(nameofuser=user.username)
+        forma = UpdateAvaForm(initial=model_to_dict(avatar, fields=['ava']))
+        return render(request, 'update_ava.html',
+                      {'user': user, 'avatar': avatar, 'forma': forma, 'username': auth.get_user(request).username})
+
+    def post(self, request):
+        forma = UpdateAvaForm(request.POST, request.FILES, instance=request.user)
+        if forma.is_valid():
+            forma.save()
+        if request.method == 'POST':
+            if 'logout' in request.POST:
+                auth.logout(request)
+                return HttpResponseRedirect('/login/')
+            if 'updated' or 'update' in request.POST:
+                return HttpResponseRedirect('/profile/')'''
 
 
 class MemberView(View):
@@ -125,23 +153,6 @@ class BandsView(ListView):
     def get(self, request, page=1):
         # member = MemberModel(first_name="Брайан", last_name="Мэй", birthdate='1947-07-19', country='Великобритания', photo='May.jpg')
         # member.save()
-        '''elements_on_page = 2
-bands = BandModel.objects.all()
-pages_count = math.ceil(len(bands) / elements_on_page)
-
-start_index = (int(page) - 1) * elements_on_page
-end_index = start_index + elements_on_page
-bands = bands[start_index:end_index]
-
-index = 1
-rows = []
-row = []
-for band in bands:
-    row.append(band)
-    index += 1  # index=3
-
-if len(row) > 0:  # 2 группы
-    rows.append(row)'''
 
         paginator = Paginator(BandModel.objects.all(), 2)
         page = request.GET.get('page')
@@ -170,6 +181,8 @@ if len(row) > 0:  # 2 группы
             elif 'logout' in request.POST:
                 auth.logout(request)
                 return HttpResponseRedirect('/login/')
+            elif 'endless_scroll' in request.POST:
+                return HttpResponseRedirect('/bands/')
             elif 'add_band' in request.POST:
                 if auth.get_user(request):
                     errors = []
@@ -262,12 +275,13 @@ def registration(request):
                     email=form.cleaned_data['email'],
                     first_name=form.cleaned_data['first_name'],
                     last_name=form.cleaned_data['last_name']
+                    # , avatar=form.cleaned_data['avatar']
                 )
-                avatar = UserModel(
-                    username=form.cleaned_data['username'],
-                    ava='/static/media/ava/default.jpg')
+                # avatar = UserModel(
+                #    username=form.cleaned_data['username'],
+                #    ava='/static/media/ava/default.jpg')
                 user.save()
-                avatar.save()
+                # avatar.save()
                 return HttpResponseRedirect('/login/')
 
     else:
@@ -316,3 +330,18 @@ class TitlesView(View):
                 return HttpResponseRedirect('/login/')
             elif 'sign_up' in request.POST:
                 return HttpResponseRedirect('/registration/')
+
+
+class BandListView(LoginRequiredMixin, ListView):
+    model = BandModel
+    template_name = 'index.html'
+    context_object_name = "band_list"
+    paginate_by = 2
+
+    def get_context_data(self, **kwargs):
+        data = super().get_context_data(**kwargs)
+        data['form_create'] = AddBandForm()
+        return data
+
+    def get_queryset(self):
+        return self.model.objects.order_by('-id')

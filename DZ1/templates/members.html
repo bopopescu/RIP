@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 {% block title %}Музыканты{% endblock %}
 {% block body %}
+    {% include 'navigator.html' %}
     <div style="display: inline; float: left; width: 70%; padding: 10px 40px;">
         <ul>
             {% for member in members %}

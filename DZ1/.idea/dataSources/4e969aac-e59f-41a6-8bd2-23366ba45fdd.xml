@@ -1429,7 +1429,7 @@ permission_id</ColNames>
       <SequenceIdentity>1</SequenceIdentity>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="345" parent="282" name="username">
+    <column id="345" parent="282" name="nameofuser">
       <Position>2</Position>
       <DataType>char(150)|0s</DataType>
       <NotNull>1</NotNull>

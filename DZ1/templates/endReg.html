@@ -2,6 +2,7 @@
 {% load static %}
 {% block title %}Стартовая страница{% endblock %}
 {% block body %}
+    {% include 'navigator.html' %}
     <form method="post">
         {% csrf_token %}
     <div class="out" style="margin: 10px 60px;">

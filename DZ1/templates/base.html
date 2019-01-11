@@ -13,8 +13,6 @@
 
 <body>
 
-{% include 'navigator.html' %}
-
 {% block body %}
 
 {% endblock %}
@@ -27,56 +25,5 @@
 <script src="{% static "js/endless.js" %}"></script>
 <script src="{% static "js/modal_trans.js" %}"></script>
 
-<script>
-    //active кнопки на навбаре
-    $(document).ready(function () {
-        $('li.active').removeClass('active');
-        $('a[href="' + location.pathname + '"]').closest('li').addClass('active');
-    });
-    // Бесконечная прокрутка
-    var pageNumber =
-    {{ page }}
-    var pagesCount = {{ pages_count }} // количество страниц
-        //Обнаружение конца страницы и загрузка новых элементов
-        $(window).scroll(
-            function () {
-                if ($(window).scrollTop() == $(document).height() - $(window).height()) {
-                    //Подгрузка новых элементов
-                    if (pageNumber < pagesCount) {
-                        pageNumber += 1
-                        loadBands(pageNumber);
-                    } else {
-                        // конец списка
-                    }
-                }
-            });
-
-    function showError(container, errorMessage) {
-        container.className = 'error';
-        var msgElem = document.createElement('span');
-        msgElem.className = "error-message";
-        msgElem.innerHTML = errorMessage;
-        container.appendChild(msgElem);
-    }
-
-    function resetError(container) {
-        container.className = '';
-        if (container.lastChild.className == "error-message") {
-            container.removeChild(container.lastChild);
-        }
-    }
-
-    function validate(form) {
-        var elems = form.elements;
-        resetError(elems.account_to.parentNode);
-        if (!elems.account_to.value) {
-            showError(elems.account_to.parentNode, ' Укажите куда.');
-        }
-        resetError(elems.money.parentNode);
-        if (!elems.money.value) {
-            showError(elems.money.parentNode, ' Сколько переводить будем?.');
-        }
-    }
-</script>
 </body>
 </html>

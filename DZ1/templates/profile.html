@@ -4,10 +4,11 @@
 {% endblock %}
 
 {% block body %}
+    {% include 'navigator.html' %}
     <div class="out" style="margin: 10px 60px;">
         <h3>Логин:</h3>
         <h4>{{ user.username }}<br>
-            <img src="/{{ avatar.ava }}" style="size: 100px;"><br></h4>
+            <img src="/static/media/ava/default.jpg" style="size: 100px;"><br></h4>
         <h3>ФИО:</h3> {{ user.last_name }} {{ user.first_name }}
         <h3>Эл.почта:</h3> {{ user.email }}<br>
         <a href="/update_profile">

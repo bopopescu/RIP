@@ -4,6 +4,7 @@
 {% endblock %}
 
 {% block body %}
+    {% include 'navigator.html' %}
     <div style="display: inline; float: left; width: 70%; padding: 10px 60px;">
         <h3>{{ member.first_name }} {{ member.last_name }}</h3>
         <img src="/{{ member.photo }}" style="width: 500px">

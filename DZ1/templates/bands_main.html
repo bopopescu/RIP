@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 {% block title %}Группы{% endblock %}
 {% block body %}
+    {% include 'navigator.html' %}
     {% if username %}
         <div style="display: inline; float: left; width: 70%; padding: 10px 60px;">
             <div class="add">
@@ -8,6 +9,10 @@
                         data-target="#exampleModal"
                         name="add_band1">Добавить музыкальную группу
                 </button>
+                <a class="btn btn-primary" href="/bands/">Кнопка
+                    для тех,
+                    кто хочет покрутить
+                </a>
             </div>
         </div>
     {% endif %}

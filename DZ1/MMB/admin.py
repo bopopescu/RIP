@@ -5,4 +5,4 @@ from .models import *
 admin.site.register(BandModel)
 admin.site.register(MembershipModel)
 admin.site.register(MemberModel)
-admin.site.register(UserModel)
+#admin.site.register(UserModel)
